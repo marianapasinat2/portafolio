@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO básico -->
+  <title>Mariana · Tu WhatsApp que atiende aunque vos no estés</title>
+  <meta name="description"
+    content="Armo sistemas de atención automática por WhatsApp para negocios. Respondés a cualquier hora sin estar disponible. Reunión de 20 minutos, gratis y sin compromiso." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* =============================================
+       TOKENS DE DISEÑO
+       ============================================= */
+    :root {
+      --verde:       #25D366; /* WhatsApp green */
+      --verde-oscuro:#128C7E;
+      --acento:      #7C3AED; /* violeta vibrante */
+      --acento-soft: #8B5CF6;
+      --fondo:       #0E0E12; /* negro casi puro */
+      --fondo-card:  #18181f;
+      --fondo-card2: #1f1f2a;
+      --borde:       rgba(255,255,255,0.07);
+      --texto:       #F0F0F5;
+      --texto-2:     #A8A8BE;
+      --radio:       16px;
+      --radio-lg:    24px;
+      --sombra:      0 8px 40px rgba(0,0,0,0.5);
+      --transicion:  0.3s ease;
+    }
+
+    /* =============================================
+       RESET Y BASE
+       ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    img { max-width: 100%; display: block; }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* =============================================
+       UTILIDADES GENERALES
+       ============================================= */
+
+    /* Contenedor centrado con máximo ancho */
+    .contenedor {
+      width: 90%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Etiqueta flotante de sección */
+    .etiqueta-seccion {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--acento-soft);
+      background: rgba(124, 58, 237, 0.12);
+      border: 1px solid rgba(124, 58, 237, 0.3);
+      padding: 4px 14px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
+
+    /* Títulos de sección */
+    .titulo-seccion {
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .titulo-seccion em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--verde), var(--acento-soft));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Texto de sección */
+    .texto-seccion {
+      font-size: 1.05rem;
+      color: var(--texto-2);
+      max-width: 640px;
+    }
+
+    /* Separador visual entre secciones */
+    section {
+      padding: 90px 0;
+      border-bottom: 1px solid var(--borde);
+    }
+    section:last-child { border-bottom: none; }
+
+    /* =============================================
+       BARRA DE NAVEGACIÓN
+       ============================================= */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      background: rgba(14, 14, 18, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--borde);
+      transition: var(--transicion);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      width: 90%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .nav-logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .nav-logo span { color: var(--verde); }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--verde);
+      color: #0E0E12;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 9px 18px;
+      border-radius: 999px;
+      transition: var(--transicion);
+    }
+    .nav-cta:hover {
+      background: #1ebe58;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 18px rgba(37,211,102,0.35);
+    }
+
+    /* =============================================
+       SECCIÓN 1 — HERO
+       ============================================= */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 100px;
+      border-bottom: 1px solid var(--borde);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Gradiente de fondo decorativo */
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: -200px;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    #hero::after {
+      content: '';
+      position: absolute;
+      bottom: -150px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(37,211,102,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--verde);
+      background: rgba(37, 211, 102, 0.1);
+      border: 1px solid rgba(37, 211, 102, 0.25);
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 28px;
+      animation: fadeInUp 0.6s ease both;
+    }
+
+    .hero-chip .punto {
+      width: 8px;
+      height: 8px;
+      background: var(--verde);
+      border-radius: 50%;
+      animation: parpadeo 1.8s ease-in-out infinite;
+    }
+
+    @keyframes parpadeo {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero-titulo {
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+      animation: fadeInUp 0.7s ease 0.1s both;
+    }
+    .hero-titulo em {
+      font-style: normal;
+      background: linear-gradient(100deg, var(--verde) 0%, var(--acento-soft) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-intro {
+      font-size: 1.1rem;
+      color: var(--texto-2);
+      max-width: 580px;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.7s ease 0.2s both;
+    }
+
+    .hero-intro strong { color: var(--texto); font-weight: 600; }
+
+    .hero-botones {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      animation: fadeInUp 0.7s ease 0.3s both;
+    }
+
+    /* Botón primario */
+    .btn-primario {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--verde);
+      color: #0E0E12;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 14px 28px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      transition: var(--transicion);
+    }
+    .btn-primario:hover {
+      background: #1ebe58;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(37,211,102,0.4);
+    }
+
+    /* Botón secundario / fantasma */
+    .btn-secundario {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      color: var(--texto);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 14px 28px;
+      border-radius: 999px;
+      border: 1px solid var(--borde);
+      cursor: pointer;
+      transition: var(--transicion);
+    }
+    .btn-secundario:hover {
+      border-color: rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.04);
+      transform: translateY(-2px);
+    }
+
+    /* =============================================
+       SECCIÓN 2 — Para quién sí / Para quién no
+       ============================================= */
+    .para-quien-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .pq-card {
+      background: var(--fondo-card);
+      border: 1px solid var(--borde);
+      border-radius: var(--radio-lg);
+      padding: 32px 28px;
+      transition: var(--transicion);
+    }
+    .pq-card:hover {
+      border-color: rgba(255,255,255,0.14);
+      transform: translateY(-4px);
+      box-shadow: var(--sombra);
+    }
+
+    .pq-card.si  { border-top: 3px solid var(--verde); }
+    .pq-card.no  { border-top: 3px solid #FF4757; }
+
+    .pq-icon {
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+    }
+
+    .pq-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .pq-card.si h3 { color: var(--verde); }
+    .pq-card.no h3 { color: #FF6B6B; }
+
+    .pq-lista {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pq-lista li {
+      font-size: 0.95rem;
+      color: var(--texto-2);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .pq-lista li .marca {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 800;
+      margin-top: 2px;
+    }
+    .pq-card.si .marca { background: rgba(37,211,102,0.15); color: var(--verde); }
+    .pq-card.no .marca { background: rgba(255,71,87,0.15); color: #FF6B6B; }
+
+    /* =============================================
+       SECCIÓN 3 — Demo · Antes y después
+       ============================================= */
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 40px;
+      align-items: start;
+    }
+
+    /* Tarjeta de chat simulado */
+    .chat-card {
+      background: var(--fondo-card);
+      border: 1px solid var(--borde);
+      border-radius: var(--radio-lg);
+      overflow: hidden;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--borde);
+    }
+    .chat-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .chat-header-info p { font-size: 0.75rem; color: var(--texto-2); }
+
+    .chat-body { padding: 16px; display: flex; flex-direction: column; gap: 10px; min-height: 200px; }
+
+    /* Burbuja de mensaje */
+    .burbuja {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      line-height: 1.4;
+    }
+    .burbuja.cliente {
+      align-self: flex-end;
+      background: #1E3A5F;
+      color: #CBD8E8;
+      border-bottom-right-radius: 4px;
+    }
+    .burbuja.bot {
+      align-self: flex-start;
+      background: #1A2A1A;
+      color: #B8E0B8;
+      border-bottom-left-radius: 4px;
+    }
+    .burbuja.humano {
+      align-self: flex-start;
+      background: var(--fondo-card2);
+      color: var(--texto-2);
+      border-bottom-left-radius: 4px;
+    }
+    .burbuja .hora {
+      font-size: 0.65rem;
+      opacity: 0.55;
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    /* Etiqueta antes/después */
+    .demo-etiqueta {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+    .demo-etiqueta.antes { background: rgba(255,71,87,0.15); color: #FF6B6B; }
+    .demo-etiqueta.despues { background: rgba(37,211,102,0.15); color: var(--verde); }
+
+    /* Leyenda debajo del chat */
+    .demo-leyenda {
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: var(--texto-2);
+      line-height: 1.5;
+    }
+
+    /* =============================================
+       SECCIÓN 4 — Cómo trabajo, paso a paso
+       ============================================= */
+    .pasos-lista {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+
+    /* Línea vertical conectora */
+    .pasos-lista::before {
+      content: '';
+      position: absolute;
+      left: 24px;
+      top: 32px;
+      bottom: 32px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--acento), var(--verde));
+      border-radius: 2px;
+    }
+
+    .paso {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      padding: 24px 0;
+      position: relative;
+    }
+
+    .paso-numero {
+      flex-shrink: 0;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--fondo-card);
+      border: 2px solid var(--acento);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--acento-soft);
+      position: relative;
+      z-index: 1;
+      transition: var(--transicion);
+    }
+    .paso:hover .paso-numero {
+      background: rgba(124,58,237,0.2);
+      border-color: var(--acento-soft);
+      transform: scale(1.08);
+    }
+
+    .paso-contenido { flex: 1; padding-top: 10px; }
+    .paso-dia {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--acento-soft);
+      margin-bottom: 4px;
+    }
+    .paso-titulo {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .paso-desc { font-size: 0.92rem; color: var(--texto-2); }
+
+    /* Tabla de pasos (versión compacta) */
+    .tabla-pasos {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 48px;
+      border-radius: var(--radio);
+      overflow: hidden;
+    }
+    .tabla-pasos th {
+      background: rgba(124,58,237,0.15);
+      color: var(--acento-soft);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 14px 18px;
+      text-align: left;
+    }
+    .tabla-pasos td {
+      padding: 16px 18px;
+      font-size: 0.92rem;
+      color: var(--texto-2);
+      border-bottom: 1px solid var(--borde);
+    }
+    .tabla-pasos tr:last-child td { border-bottom: none; }
+    .tabla-pasos tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+    .tabla-pasos td:first-child {
+      font-weight: 700;
+      color: var(--verde);
+    }
+
+    /* =============================================
+       SECCIÓN 5 — Cómo armo un presupuesto
+       ============================================= */
+    .presupuesto-card {
+      background: var(--fondo-card);
+      border: 1px solid var(--borde);
+      border-radius: var(--radio-lg);
+      padding: 40px;
+      margin-top: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .presupuesto-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 4px;
+      background: linear-gradient(90deg, var(--acento), var(--verde));
+    }
+
+    .presupuesto-card blockquote {
+      border-left: 3px solid var(--acento);
+      margin: 24px 0;
+      padding: 4px 20px;
+      font-size: 1.05rem;
+      color: var(--texto-2);
+      font-style: italic;
+    }
+
+    /* Alerta de tipo "importante" */
+    .alerta-importante {
+      background: rgba(124,58,237,0.1);
+      border: 1px solid rgba(124,58,237,0.3);
+      border-radius: var(--radio);
+      padding: 20px 24px;
+      margin-top: 24px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .alerta-importante .icono {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .alerta-importante h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--acento-soft);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .alerta-importante p { font-size: 0.9rem; color: var(--texto-2); line-height: 1.6; }
+
+    /* =============================================
+       SECCIÓN 6 — Preguntas frecuentes
+       ============================================= */
+    .faq-lista {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--fondo-card);
+      border: 1px solid var(--borde);
+      border-radius: var(--radio);
+      overflow: hidden;
+      transition: var(--transicion);
+    }
+    .faq-item:hover { border-color: rgba(255,255,255,0.14); }
+
+    .faq-pregunta {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--texto);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.98rem;
+      font-weight: 600;
+      padding: 20px 24px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      transition: var(--transicion);
+    }
+    .faq-pregunta:hover { color: var(--acento-soft); }
+
+    .faq-chevron {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(124,58,237,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      color: var(--acento-soft);
+      transition: var(--transicion);
+    }
+    .faq-item.abierto .faq-chevron { transform: rotate(180deg); background: rgba(124,58,237,0.3); }
+
+    .faq-respuesta {
+      display: none;
+      padding: 0 24px 20px;
+      font-size: 0.92rem;
+      color: var(--texto-2);
+      line-height: 1.7;
+      border-top: 1px solid var(--borde);
+      padding-top: 16px;
+    }
+    .faq-item.abierto .faq-respuesta { display: block; }
+
+    /* =============================================
+       SECCIÓN 7 — CTA Final
+       ============================================= */
+    #cta {
+      padding: 100px 0;
+      text-align: center;
+      border-bottom: none;
+      position: relative;
+      overflow: hidden;
+    }
+    #cta::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(37,211,102,0.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .cta-card {
+      background: var(--fondo-card);
+      border: 1px solid var(--borde);
+      border-radius: var(--radio-lg);
+      padding: 60px 40px;
+      position: relative;
+      overflow: hidden;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .cta-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--verde), var(--acento));
+    }
+
+    .cta-card .titulo-seccion { text-align: center; }
+    .cta-texto {
+      font-size: 0.98rem;
+      color: var(--texto-2);
+      margin-bottom: 8px;
+      line-height: 1.65;
+      text-align: center;
+    }
+
+    .cta-garantia {
+      margin: 24px auto 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--verde);
+      background: rgba(37,211,102,0.08);
+      border: 1px solid rgba(37,211,102,0.2);
+      padding: 7px 16px;
+      border-radius: 999px;
+    }
+
+    /* Botón principal del CTA */
+    #btn-reunion {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, var(--verde), #1ebe58);
+      color: #0E0E12;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      padding: 18px 36px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      transition: var(--transicion);
+      box-shadow: 0 4px 24px rgba(37,211,102,0.3);
+    }
+    #btn-reunion:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 36px rgba(37,211,102,0.5);
+    }
+    #btn-reunion:active { transform: translateY(-1px); }
+
+    .btn-wa-icon {
+      width: 22px;
+      height: 22px;
+      fill: #0E0E12;
+    }
+
+    .cta-nota {
+      margin-top: 18px;
+      font-size: 0.78rem;
+      color: var(--texto-2);
+    }
+
+    /* =============================================
+       FOOTER
+       ============================================= */
+    footer {
+      padding: 36px 0;
+      text-align: center;
+      border-top: 1px solid var(--borde);
+      font-size: 0.82rem;
+      color: var(--texto-2);
+    }
+    footer strong { color: var(--texto); }
+
+    /* =============================================
+       ANIMACIONES DE ENTRADA
+       ============================================= */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .animar {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .animar.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =============================================
+       RESPONSIVE — MÓVIL
+       ============================================= */
+    @media (max-width: 680px) {
+      .para-quien-grid { grid-template-columns: 1fr; }
+      .demo-grid { grid-template-columns: 1fr; }
+      .pasos-lista::before { left: 20px; }
+      .presupuesto-card { padding: 28px 20px; }
+      .cta-card { padding: 40px 24px; }
+      .tabla-pasos { font-size: 0.85rem; }
+      .tabla-pasos td, .tabla-pasos th { padding: 12px 12px; }
+    }
+
+    /* =============================================
+       BARRA DE PROGRESO DE LECTURA
+       ============================================= */
+    #barra-progreso {
+      position: fixed;
+      top: 0; left: 0;
+      width: 0%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--verde), var(--acento));
+      z-index: 200;
+      transition: width 0.1s linear;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Barra de progreso de lectura -->
+  <div id="barra-progreso" aria-hidden="true"></div>
+
+  <!-- =============================================
+       NAVEGACIÓN
+       ============================================= -->
+  <nav aria-label="Navegación principal">
+    <div class="nav-inner">
+      <span class="nav-logo">Mariana<span>.</span></span>
+      <a href="#cta" class="nav-cta" id="nav-cta-btn">
+        <!-- Ícono WhatsApp pequeño -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12.004 2C6.477 2 2 6.477 2 12.004c0 1.771.467 3.477 1.352 4.979L2 22l5.145-1.334A9.96 9.96 0 0012.004 22C17.527 22 22 17.527 22 12.004 22 6.477 17.527 2 12.004 2zm0 18.18a8.166 8.166 0 01-4.179-1.148l-.3-.178-3.052.791.814-2.98-.196-.307a8.155 8.155 0 01-1.251-4.358c0-4.512 3.67-8.18 8.164-8.18 4.511 0 8.18 3.668 8.18 8.18 0 4.51-3.669 8.18-8.18 8.18z"/>
+        </svg>
+        Agendá tu demo
+      </a>
+    </div>
+  </nav>
+
+  <!-- =============================================
+       SECCIÓN 1 — HERO
+       ============================================= -->
+  <section id="hero" aria-labelledby="hero-titulo">
+    <div class="contenedor">
+
+      <!-- Chip de estado -->
+      <div class="hero-chip" role="status">
+        <span class="punto" aria-hidden="true"></span>
+        Disponible para nuevos clientes
+      </div>
+
+      <!-- Título principal -->
+      <h1 class="hero-titulo" id="hero-titulo">
+        Tu WhatsApp que atiende<br />
+        <em>aunque vos no estés</em>
+      </h1>
+
+      <!-- Presentación breve -->
+      <p class="hero-intro">
+        Soy <strong>Mariana</strong>. Le armo a negocios un sistema que responde por WhatsApp solo,
+        a cualquier hora, sin que el dueño tenga que estar disponible.<br /><br />
+        En <strong>7 días</strong> tu negocio ya tiene un asistente que informa, toma pedidos
+        y avisa cuando necesitás aparecer vos.
+      </p>
+
+      <!-- Botones de acción -->
+      <div class="hero-botones">
+        <a href="#cta" class="btn-primario" id="hero-btn-demo">
+          <svg class="btn-wa-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12.004 2C6.477 2 2 6.477 2 12.004c0 1.771.467 3.477 1.352 4.979L2 22l5.145-1.334A9.96 9.96 0 0012.004 22C17.527 22 22 17.527 22 12.004 22 6.477 17.527 2 12.004 2zm0 18.18a8.166 8.166 0 01-4.179-1.148l-.3-.178-3.052.791.814-2.98-.196-.307a8.155 8.155 0 01-1.251-4.358c0-4.512 3.67-8.18 8.164-8.18 4.511 0 8.18 3.668 8.18 8.18 0 4.51-3.669 8.18-8.18 8.18z"/>
+          </svg>
+          Quiero ver la demo
+        </a>
+        <a href="#como-trabajo" class="btn-secundario" id="hero-btn-mas">
+          Cómo funciona ↓
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =============================================
+       SECCIÓN 2 — Para quién sí / Para quién no
+       ============================================= -->
+  <section id="para-quien" aria-labelledby="pq-titulo">
+    <div class="contenedor">
+
+      <span class="etiqueta-seccion">Esto es para vos si…</span>
+      <h2 class="titulo-seccion" id="pq-titulo">
+        ¿Este servicio<br /><em>es para tu negocio?</em>
+      </h2>
+      <p class="texto-seccion">
+        Leé las dos columnas y fijate si te identificás. Si la del SÍ te suena conocida, vale la pena que hablemos.
+      </p>
+
+      <div class="para-quien-grid animar">
+
+        <!-- Columna SÍ -->
+        <div class="pq-card si" role="region" aria-label="Para quién sí aplica el servicio">
+          <div class="pq-icon" aria-hidden="true">✅</div>
+          <h3>Esto es para vos si…</h3>
+          <ul class="pq-lista">
+            <li>
+              <span class="marca" aria-hidden="true">✓</span>
+              Tenés un negocio, te llegan mensajes todo el día y no podés contestar todos a tiempo.
+            </li>
+            <li>
+              <span class="marca" aria-hidden="true">✓</span>
+              Querés que tu negocio atienda de noche, los fines de semana o cuando estás ocupado, sin contratar a nadie.
+            </li>
+            <li>
+              <span class="marca" aria-hidden="true">✓</span>
+              Perdiste ventas porque respondiste tarde y el cliente ya compró en otro lado.
+            </li>
+          </ul>
+        </div>
+
+        <!-- Columna NO -->
+        <div class="pq-card no" role="region" aria-label="Para quién no aplica el servicio">
+          <div class="pq-icon" aria-hidden="true">❌</div>
+          <h3>Todavía no es para vos si…</h3>
+          <ul class="pq-lista">
+            <li>
+              <span class="marca" aria-hidden="true">✗</span>
+              Ya tenés un equipo de atención al cliente funcionando bien y sin cuellos de botella.
+            </li>
+            <li>
+              <span class="marca" aria-hidden="true">✗</span>
+              Buscás un sistema para grandes empresas con miles de contactos simultáneos.
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       SECCIÓN 3 — Demo · Antes y después
+       ============================================= -->
+  <section id="demo" aria-labelledby="demo-titulo">
+    <div class="contenedor">
+
+      <span class="etiqueta-seccion">Demo</span>
+      <h2 class="titulo-seccion" id="demo-titulo">
+        Mirá la diferencia<br /><em>con tus propios ojos</em>
+      </h2>
+      <p class="texto-seccion">
+        No te lo imagines: acá abajo lo ves. Un cliente manda un mensaje a las 10 de la noche…
+      </p>
+
+      <div class="demo-grid animar">
+
+        <!-- Antes -->
+        <div>
+          <span class="demo-etiqueta antes">😤 Antes — Sin el sistema</span>
+          <div class="chat-card" role="region" aria-label="Ejemplo de chat sin sistema automatizado">
+            <div class="chat-header">
+              <div class="chat-avatar" style="background:#2A1A1A; color:#FF6B6B;">T</div>
+              <div class="chat-header-info">
+                <strong>Tu negocio</strong>
+                <p>Última vez a las 09:00 hs</p>
+              </div>
+            </div>
+            <div class="chat-body">
+              <div class="burbuja cliente">
+                ¡Hola! ¿Tienen disponible el servicio para el sábado?
+                <div class="hora">22:14 ✓</div>
+              </div>
+              <div class="burbuja humano" style="opacity:0.45; font-style:italic;">
+                — Sin respuesta —
+                <div class="hora">22:14</div>
+              </div>
+              <div class="burbuja cliente">
+                Bueno, me voy a otro lado 🙄
+                <div class="hora">22:45 ✓✓</div>
+              </div>
+            </div>
+          </div>
+          <p class="demo-leyenda">
+            💸 El cliente espera, se cansa y compra en otro lado. Vos te enterás al otro día.
+          </p>
+        </div>
+
+        <!-- Después -->
+        <div>
+          <span class="demo-etiqueta despues">🟢 Después — Con el sistema</span>
+          <div class="chat-card" role="region" aria-label="Ejemplo de chat con sistema automatizado">
+            <div class="chat-header">
+              <div class="chat-avatar" style="background:#1A2A1A; color:#25D366;">T</div>
+              <div class="chat-header-info">
+                <strong>Tu negocio</strong>
+                <p>🟢 En línea — responde al instante</p>
+              </div>
+            </div>
+            <div class="chat-body">
+              <div class="burbuja cliente">
+                ¡Hola! ¿Tienen disponible el servicio para el sábado?
+                <div class="hora">22:14 ✓</div>
+              </div>
+              <div class="burbuja bot">
+                ¡Hola! 👋 Sí, el sábado tenemos lugar. ¿Preferís mañana a la mañana o a la tarde?
+                <div class="hora">22:14 ✓✓</div>
+              </div>
+              <div class="burbuja cliente">
+                A la mañana, perfecto 🙌
+                <div class="hora">22:15 ✓✓</div>
+              </div>
+              <div class="burbuja bot">
+                ¡Anotado! Te confirmo turno para el sábado a las 10:00 hs. Cualquier duda, acá estoy 😊
+                <div class="hora">22:15 ✓✓</div>
+              </div>
+            </div>
+          </div>
+          <p class="demo-leyenda">
+            🎉 El cliente queda satisfecho en 60 segundos. Vos te enterás cuando ya está cerrado.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       SECCIÓN 4 — Cómo trabajo, paso a paso
+       ============================================= -->
+  <section id="como-trabajo" aria-labelledby="pasos-titulo">
+    <div class="contenedor">
+
+      <span class="etiqueta-seccion">El proceso</span>
+      <h2 class="titulo-seccion" id="pasos-titulo">
+        <em>Cuatro pasos</em><br />y ya está andando
+      </h2>
+      <p class="texto-seccion">
+        Tu tiempo es mínimo. Yo me encargo de la parte técnica; vos ponés el conocimiento de tu negocio.
+      </p>
+
+      <!-- Lista de pasos con línea conectora -->
+      <div class="pasos-lista" role="list">
+
+        <div class="paso animar" role="listitem">
+          <div class="paso-numero" aria-label="Paso 1">1</div>
+          <div class="paso-contenido">
+            <div class="paso-dia">Día 1</div>
+            <div class="paso-titulo">Reunión inicial — 1 hora</div>
+            <div class="paso-desc">Me contás cómo funciona tu negocio y qué te preguntan siempre. Vos hablás, yo escucho y tomo nota de todo.</div>
+          </div>
+        </div>
+
+        <div class="paso animar" role="listitem">
+          <div class="paso-numero" aria-label="Pasos 2 al 5">2–5</div>
+          <div class="paso-contenido">
+            <div class="paso-dia">Días 2 a 5</div>
+            <div class="paso-titulo">Configuración completa — Solo yo</div>
+            <div class="paso-desc">Armo todo el sistema: respuestas, flujos, alertas. Vos no hacés nada, solo esperás.</div>
+          </div>
+        </div>
+
+        <div class="paso animar" role="listitem">
+          <div class="paso-numero" aria-label="Paso 6">6</div>
+          <div class="paso-contenido">
+            <div class="paso-dia">Día 6</div>
+            <div class="paso-titulo">Prueba en conjunto</div>
+            <div class="paso-desc">Lo revisamos juntos, mandamos mensajes de prueba y ajustamos lo que sea necesario antes de salir al público.</div>
+          </div>
+        </div>
+
+        <div class="paso animar" role="listitem">
+          <div class="paso-numero" aria-label="Paso 7" style="border-color: var(--verde); color: var(--verde);">7</div>
+          <div class="paso-contenido">
+            <div class="paso-dia" style="color: var(--verde);">Día 7</div>
+            <div class="paso-titulo">🚀 Lanzamiento</div>
+            <div class="paso-desc">Tu bot sale a la cancha. Si algo no cierra, lo ajustamos antes de largar. Tu negocio ya atiende solo.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Tabla resumen -->
+      <table class="tabla-pasos animar" role="table" aria-label="Resumen del proceso en 4 pasos">
+        <thead>
+          <tr>
+            <th scope="col">Paso</th>
+            <th scope="col">Qué pasa</th>
+            <th scope="col">Quién hace qué</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Reunión inicial de 1 hora</td>
+            <td>Vos hablás, yo escucho</td>
+          </tr>
+          <tr>
+            <td>2–5</td>
+            <td>Configuración completa</td>
+            <td>Yo trabajo, vos descansás</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>Prueba en conjunto</td>
+            <td>Los dos revisamos</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>Lanzamiento</td>
+            <td>Tu bot sale a atender</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </section>
+
+  <!-- =============================================
+       SECCIÓN 5 — Cómo armo un presupuesto
+       ============================================= -->
+  <section id="presupuesto" aria-labelledby="presupuesto-titulo">
+    <div class="contenedor">
+
+      <span class="etiqueta-seccion">El número</span>
+      <h2 class="titulo-seccion" id="presupuesto-titulo">
+        El número lo hablamos<br /><em>después de la demo</em>, nunca antes
+      </h2>
+      <p class="texto-seccion">
+        No tengo precio fijo de lista porque cada negocio es distinto.
+      </p>
+
+      <div class="presupuesto-card animar">
+        <blockquote>
+          "No tengo un precio fijo de lista porque cada negocio es distinto: no es lo mismo una peluquería que un taller mecánico."
+        </blockquote>
+        <blockquote>
+          "Primero te muestro cómo funciona en vivo. Si te convence, ahí hablamos los números en una reunión de 20 minutos, sin apuro y sin compromiso."
+        </blockquote>
+
+        <!-- Alerta importante -->
+        <div class="alerta-importante" role="note" aria-label="Razón por la que no se publica el precio">
+          <span class="icono" aria-hidden="true">💡</span>
+          <div>
+            <h4>¿Por qué no publicás el precio?</h4>
+            <p>
+              Porque un número sin contexto siempre parece caro. Cuando el cliente ya vio la demo
+              y entiende lo que recibe, la conversación sobre plata es completamente distinta.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =============================================
+       SECCIÓN 6 — Preguntas frecuentes
+       ============================================= -->
+  <section id="faq" aria-labelledby="faq-titulo">
+    <div class="contenedor">
+
+      <span class="etiqueta-seccion">FAQ</span>
+      <h2 class="titulo-seccion" id="faq-titulo">
+        Las dudas que<br /><em>casi todos tienen</em>
+      </h2>
+      <p class="texto-seccion">
+        Si tenés una pregunta que no está acá, la respondemos en la reunión de 20 minutos.
+      </p>
+
+      <!-- Acordeón FAQ -->
+      <div class="faq-lista animar" role="list">
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-pregunta" aria-expanded="false" id="faq-1" aria-controls="faq-resp-1">
+            ¿El bot reemplaza a una persona?
+            <span class="faq-chevron" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-respuesta" id="faq-resp-1" role="region" aria-labelledby="faq-1">
+            No. Atiende lo automático y te avisa cuando necesitás aparecer vos. Vos seguís siendo el dueño de la relación con tu cliente.
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-pregunta" aria-expanded="false" id="faq-2" aria-controls="faq-resp-2">
+            ¿Necesito saber de tecnología?
+            <span class="faq-chevron" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-respuesta" id="faq-resp-2" role="region" aria-labelledby="faq-2">
+            Para nada. Te entrego todo funcionando y te explico en dos minutos cómo usarlo. Si manejás WhatsApp, manejás esto.
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-pregunta" aria-expanded="false" id="faq-3" aria-controls="faq-resp-3">
+            ¿Qué pasa si el bot contesta algo mal?
+            <span class="faq-chevron" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-respuesta" id="faq-resp-3" role="region" aria-labelledby="faq-3">
+            Lo probamos juntos antes de largar. Y siempre podés apagarlo con un clic si necesitás. Salimos solo cuando los dos estamos conformes.
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-pregunta" aria-expanded="false" id="faq-4" aria-controls="faq-resp-4">
+            ¿Funciona con mi WhatsApp?
+            <span class="faq-chevron" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-respuesta" id="faq-resp-4" role="region" aria-labelledby="faq-4">
+            Sí, con WhatsApp Business, que es gratis. Si no lo tenés todavía, te ayudo a activarlo paso a paso.
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-pregunta" aria-expanded="false" id="faq-5" aria-controls="faq-resp-5">
+            ¿Qué información me tenés que dar vos?
+            <span class="faq-chevron" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-respuesta" id="faq-resp-5" role="region" aria-labelledby="faq-5">
+            Una hora de tu tiempo, los precios o servicios de tu negocio (una foto alcanza) y acceso a tu WhatsApp Business. Con eso arrancamos.
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-pregunta" aria-expanded="false" id="faq-6" aria-controls="faq-resp-6">
+            ¿Después puedo agregar más cosas?
+            <span class="faq-chevron" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-respuesta" id="faq-resp-6" role="region" aria-labelledby="faq-6">
+            Sí. Arrancamos simple y, si querés, sumamos más funciones cuando el negocio lo pida. Nada está escrito en piedra.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       SECCIÓN 7 — CTA Final
+       ============================================= -->
+  <section id="cta" aria-labelledby="cta-titulo">
+    <div class="contenedor">
+
+      <div class="cta-card">
+        <span class="etiqueta-seccion" style="display:block; text-align:center; margin-bottom:24px;">El siguiente paso</span>
+
+        <h2 class="titulo-seccion" id="cta-titulo">
+          Agendá una reunión<br />de <em>20 minutos</em><br />— gratis y sin compromiso
+        </h2>
+
+        <p class="cta-texto">
+          Te muestro en vivo cómo funciona el bot para un negocio parecido al tuyo.
+          Sin tecnicismos, sin apuro.
+        </p>
+        <p class="cta-texto">
+          Si te interesa seguir, hablamos los números. Si no, quedás con una idea clara
+          de lo que existe hoy en el mercado.
+        </p>
+
+        <div style="display:flex; justify-content:center;">
+          <span class="cta-garantia">
+            🔒 Gratis · Sin tarjeta · Sin compromiso
+          </span>
+        </div>
+
+        <!-- Botón principal de CTA — reemplazá el href con tu link de Calendly -->
+        <div style="text-align:center;">
+          <button
+            id="btn-reunion"
+            type="button"
+            onclick="alert('¡Genial! Reemplazá este alert() por window.open(\'TU_LINK_CALENDLY\') en el código.')"
+            aria-label="Agendar reunión de demostración gratuita de 20 minutos"
+          >
+            <svg class="btn-wa-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+              <path d="M12.004 2C6.477 2 2 6.477 2 12.004c0 1.771.467 3.477 1.352 4.979L2 22l5.145-1.334A9.96 9.96 0 0012.004 22C17.527 22 22 17.527 22 12.004 22 6.477 17.527 2 12.004 2zm0 18.18a8.166 8.166 0 01-4.179-1.148l-.3-.178-3.052.791.814-2.98-.196-.307a8.155 8.155 0 01-1.251-4.358c0-4.512 3.67-8.18 8.164-8.18 4.511 0 8.18 3.668 8.18 8.18 0 4.51-3.669 8.18-8.18 8.18z"/>
+            </svg>
+            Quiero ver la demo
+          </button>
+        </div>
+
+        <p class="cta-nota">
+          La reunión dura 20 minutos · Sin tecnicismos · Podés cancelar sin problema
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =============================================
+       FOOTER
+       ============================================= -->
+  <footer role="contentinfo">
+    <p>© 2025 <strong>Mariana</strong> · Servicios de IA para negocios · Hecho con 💚 en Argentina</p>
+  </footer>
+
+  <!-- =============================================
+       JAVASCRIPT — sin frameworks, código comentado
+       ============================================= -->
+  <script>
+    /* ------------------------------------------------
+       1. ACORDEÓN DE PREGUNTAS FRECUENTES
+       Abre y cierra cada respuesta al hacer clic.
+       Solo un item puede estar abierto a la vez.
+    ------------------------------------------------ */
+    document.querySelectorAll('.faq-pregunta').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var item = btn.closest('.faq-item');
+        var estaAbierto = item.classList.contains('abierto');
+
+        /* Cerrar todos los ítems que estén abiertos */
+        document.querySelectorAll('.faq-item.abierto').forEach(function (abierto) {
+          abierto.classList.remove('abierto');
+          abierto.querySelector('.faq-pregunta').setAttribute('aria-expanded', 'false');
+        });
+
+        /* Si el ítem estaba cerrado, ahora lo abrimos */
+        if (!estaAbierto) {
+          item.classList.add('abierto');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    /* ------------------------------------------------
+       2. ANIMACIONES DE ENTRADA CON INTERSECTION OBSERVER
+       Cada elemento con clase .animar se hace visible
+       al entrar al viewport. Solo anima una vez.
+    ------------------------------------------------ */
+    var observador = new IntersectionObserver(
+      function (entradas) {
+        entradas.forEach(function (entrada) {
+          if (entrada.isIntersecting) {
+            entrada.target.classList.add('visible');
+            /* Dejamos de observar para no repetir la animación */
+            observador.unobserve(entrada.target);
+          }
+        });
+      },
+      { threshold: 0.12 } /* Se activa cuando el 12% del elemento es visible */
+    );
+
+    /* Registramos todos los elementos animables */
+    document.querySelectorAll('.animar').forEach(function (el) {
+      observador.observe(el);
+    });
+
+    /* ------------------------------------------------
+       3. BARRA DE PROGRESO DE LECTURA
+       Muestra cuánto scrolleó el usuario en la página.
+    ------------------------------------------------ */
+    var barra = document.getElementById('barra-progreso');
+
+    window.addEventListener('scroll', function () {
+      var scrollTotal = document.documentElement.scrollHeight - window.innerHeight;
+      var progreso = scrollTotal > 0 ? (window.scrollY / scrollTotal) * 100 : 0;
+      barra.style.width = progreso + '%';
+    }, { passive: true }); /* passive: true mejora la performance del scroll */
+
+    /* ------------------------------------------------
+       4. NAVBAR — se vuelve más opaca al hacer scroll
+       Mejora la legibilidad del texto del menú.
+    ------------------------------------------------ */
+    var nav = document.querySelector('nav');
+
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 60) {
+        nav.style.background = 'rgba(14, 14, 18, 0.97)';
+      } else {
+        nav.style.background = 'rgba(14, 14, 18, 0.85)';
+      }
+    }, { passive: true });
+
+  </script>
+
+</body>
+</html>
