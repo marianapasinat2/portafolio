@@ -1219,38 +1219,81 @@
   </section>
 
   <!-- =============================================
-       SECCIÓN 5 — Cómo armo un presupuesto
+       SECCIÓN 5 — La inversión
        ============================================= -->
   <section id="presupuesto" aria-labelledby="presupuesto-titulo">
     <div class="contenedor">
 
-      <span class="etiqueta-seccion">El número</span>
+      <span class="etiqueta-seccion">La inversión</span>
       <h2 class="titulo-seccion" id="presupuesto-titulo">
-        El número lo hablamos<br /><em>después de la demo</em>, nunca antes
+        No publico precio.<br /><em>Y hay una razón.</em>
       </h2>
-      <p class="texto-seccion">
-        No tengo precio fijo de lista porque cada negocio es distinto.
-      </p>
 
       <div class="presupuesto-card animar">
-        <blockquote>
-          "No tengo un precio fijo de lista porque cada negocio es distinto: no es lo mismo una peluquería que un taller mecánico."
-        </blockquote>
-        <blockquote>
-          "Primero te muestro cómo funciona en vivo. Si te convence, ahí hablamos los números en una reunión de 20 minutos, sin apuro y sin compromiso."
-        </blockquote>
 
-        <!-- Alerta importante -->
-        <div class="alerta-importante" role="note" aria-label="Razón por la que no se publica el precio">
-          <span class="icono" aria-hidden="true">💡</span>
+        <!-- Las 8 líneas del argumento -->
+        <p style="font-size:1.05rem; color:var(--texto-2); line-height:1.8; margin-bottom:28px;">
+          Un número sin contexto siempre parece caro.<br />
+          Antes de hablar de plata, quiero que veas el sistema funcionando.<br />
+          Que entiendas exactamente qué recibís y qué no.<br />
+          Que puedas preguntar lo que quieras sin compromiso.<br /><br />
+          Recién después de la demo, en una reunión 1:1 de 20 minutos,<br />
+          te armo un presupuesto a medida de tu negocio.<br />
+          No es lo mismo una peluquería que un taller mecánico.<br />
+          Cada caso tiene su número, y ese número lo hablamos en persona.
+        </p>
+
+        <!-- Alerta: el único camino -->
+        <div class="alerta-importante" role="note" aria-label="El único camino al número es la reunión">
+          <span class="icono" aria-hidden="true">🔒</span>
           <div>
-            <h4>¿Por qué no publicás el precio?</h4>
+            <h4>El único camino al número es la reunión</h4>
             <p>
-              Porque un número sin contexto siempre parece caro. Cuando el cliente ya vio la demo
-              y entiende lo que recibe, la conversación sobre plata es completamente distinta.
+              No hay precio en esta página, no hay rango, no hay "desde".
+              Si querés el número, agendá la reunión. Dura 20 minutos,
+              es gratis y no te compromete a nada.
             </p>
           </div>
         </div>
+
+        <!-- CTA dentro de la card -->
+        <div style="margin-top:32px; text-align:center;">
+          <a
+            href="https://wa.me/5493484550992?text=quiero%20una%20reunion%201%3A1%20con%20Mariana"
+            target="_blank"
+            rel="noopener noreferrer"
+            id="btn-presupuesto-wa"
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 10px;
+              background: var(--verde);
+              color: #0E0E12;
+              font-family: 'Inter', sans-serif;
+              font-size: 1rem;
+              font-weight: 800;
+              padding: 15px 30px;
+              border-radius: 999px;
+              text-decoration: none;
+              transition: all 0.25s ease;
+              box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+            "
+            onmouseover="this.style.background='#1ebe58'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 30px rgba(37,211,102,0.5)';"
+            onmouseout="this.style.background='var(--verde)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(37,211,102,0.3)';"
+            aria-label="Agendar reunión de 20 minutos por WhatsApp"
+          >
+            <!-- Ícono WhatsApp -->
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#0E0E12" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+              <path d="M12.004 2C6.477 2 2 6.477 2 12.004c0 1.771.467 3.477 1.352 4.979L2 22l5.145-1.334A9.96 9.96 0 0012.004 22C17.527 22 22 17.527 22 12.004 22 6.477 17.527 2 12.004 2zm0 18.18a8.166 8.166 0 01-4.179-1.148l-.3-.178-3.052.791.814-2.98-.196-.307a8.155 8.155 0 01-1.251-4.358c0-4.512 3.67-8.18 8.164-8.18 4.511 0 8.18 3.668 8.18 8.18 0 4.51-3.669 8.18-8.18 8.18z"/>
+            </svg>
+            Agendá la reunión de 20 minutos
+          </a>
+          <p style="margin-top:12px; font-size:0.76rem; color:var(--texto-2);">
+            Gratis · Sin compromiso · Por WhatsApp, sin formularios
+          </p>
+        </div>
+
       </div>
 
     </div>
