@@ -815,16 +815,118 @@
     }
 
     /* =============================================
-       RESPONSIVE — MÓVIL
+       RESPONSIVE — DESKTOP ANCHO
+       ============================================= */
+    @media (min-width: 1024px) {
+      /* Contenedor un poco más generoso en pantallas grandes */
+      .contenedor { max-width: 860px; }
+      /* Secciones con más aire */
+      section { padding: 100px 0; }
+      /* Tabla con más padding */
+      .tabla-pasos td, .tabla-pasos th { padding: 18px 22px; }
+      /* FAQ más amplia */
+      .faq-pregunta { font-size: 1.02rem; padding: 22px 28px; }
+      .faq-respuesta { font-size: 0.95rem; }
+    }
+
+    /* =============================================
+       RESPONSIVE — TABLET (681px – 900px)
+       ============================================= */
+    @media (max-width: 900px) {
+      /* Reducir padding secciones */
+      section { padding: 72px 0; }
+      /* Tabla: ocultar columna 3 en tablet si hace falta */
+      .tabla-pasos td:last-child,
+      .tabla-pasos th:last-child { display: none; }
+    }
+
+    /* =============================================
+       RESPONSIVE — MÓVIL (≤ 680px)
        ============================================= */
     @media (max-width: 680px) {
+      /* Secciones: menos espacio vertical */
+      section { padding: 56px 0; }
+
+      /* Contenedor: más margen lateral */
+      .contenedor { width: 92%; }
+
+      /* Nav: ocultar link de demo en pantallas chicas */
+      .nav-demo-link { display: none; }
+      .nav-inner { padding: 12px 0; }
+
+      /* Hero: que no ocupe pantalla completa en móvil */
+      #hero {
+        min-height: auto;
+        padding-top: 90px;
+        padding-bottom: 60px;
+      }
+      /* Título hero más compacto */
+      .hero-titulo { font-size: clamp(1.9rem, 8vw, 2.6rem); margin-bottom: 20px; }
+      .hero-intro { font-size: 1rem; margin-bottom: 28px; }
+
+      /* Botones del hero: stack vertical en móvil */
+      .hero-botones { flex-direction: column; gap: 12px; }
+      .btn-primario, .btn-secundario {
+        width: 100%;
+        justify-content: center;
+        font-size: 0.97rem;
+        padding: 15px 20px;
+      }
+
+      /* Para quién: una columna */
       .para-quien-grid { grid-template-columns: 1fr; }
+      .pq-card { padding: 24px 20px; }
+
+      /* Demo: una columna */
       .demo-grid { grid-template-columns: 1fr; }
+
+      /* Pasos: línea conectora ajustada */
       .pasos-lista::before { left: 20px; }
-      .presupuesto-card { padding: 28px 20px; }
-      .cta-card { padding: 40px 24px; }
-      .tabla-pasos { font-size: 0.85rem; }
-      .tabla-pasos td, .tabla-pasos th { padding: 12px 12px; }
+      .paso-numero { width: 42px; height: 42px; font-size: 0.82rem; }
+      .paso-titulo { font-size: 0.98rem; }
+      .paso-desc { font-size: 0.88rem; }
+
+      /* Tabla: scroll horizontal para no romper layout */
+      .tabla-pasos-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-top: 32px;
+        border-radius: var(--radio);
+      }
+      .tabla-pasos {
+        margin-top: 0;
+        min-width: 480px; /* fuerza scroll antes de romper */
+        font-size: 0.82rem;
+      }
+      .tabla-pasos td, .tabla-pasos th { padding: 11px 14px; }
+      /* Restaurar columna oculta en tablet */
+      .tabla-pasos td:last-child,
+      .tabla-pasos th:last-child { display: table-cell; }
+
+      /* Presupuesto card */
+      .presupuesto-card { padding: 24px 18px; }
+      .alerta-importante { flex-direction: column; gap: 10px; padding: 16px 18px; }
+
+      /* FAQ */
+      .faq-pregunta { font-size: 0.9rem; padding: 16px 18px; }
+      .faq-respuesta { font-size: 0.88rem; padding: 0 18px 16px; padding-top: 14px; }
+
+      /* CTA final */
+      .cta-card { padding: 36px 20px; }
+      #btn-reunion { font-size: 0.97rem; padding: 15px 24px; width: 100%; justify-content: center; }
+
+      /* Título secciones más ajustado */
+      .titulo-seccion { font-size: clamp(1.5rem, 7vw, 2rem); }
+    }
+
+    /* =============================================
+       RESPONSIVE — MÓVIL PEQUEÑO (≤ 400px)
+       ============================================= */
+    @media (max-width: 400px) {
+      .hero-titulo { font-size: 1.75rem; }
+      .nav-logo { font-size: 1rem; }
+      .nav-cta { font-size: 0.78rem; padding: 8px 14px; }
+      .nav-cta svg { display: none; } /* en teléfonos muy chicos oculta el ícono del botón */
     }
 
     /* =============================================
@@ -853,13 +955,21 @@
   <nav aria-label="Navegación principal">
     <div class="nav-inner">
       <span class="nav-logo">Mariana<span>.</span></span>
-      <!-- Link a la demo interactiva -->
+      <!-- Link a la demo interactiva — oculto en pantallas muy chicas -->
       <a href="demo.html" class="nav-demo-link" id="nav-demo-link"
          style="font-size:0.85rem; font-weight:600; color:var(--texto-2); transition:color 0.25s ease; margin-right:4px;"
          onmouseover="this.style.color='var(--verde)'" onmouseout="this.style.color='var(--texto-2)'">
         ▶ Ver demo
       </a>
-      <a href="#cta" class="nav-cta" id="nav-cta-btn">
+      <!-- Botón verde → WhatsApp directo con mensaje preescrito -->
+      <a
+        href="https://wa.me/5493484550992?text=quiero%20agendar%20mi%20demo"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="nav-cta"
+        id="nav-cta-btn"
+        aria-label="Agendar demo por WhatsApp"
+      >
         <!-- Ícono WhatsApp pequeño -->
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
@@ -1172,48 +1282,50 @@
 
       </div>
 
-      <!-- Tabla resumen -->
-      <table class="tabla-pasos animar" role="table" aria-label="Resumen del proceso en 6 pasos">
-        <thead>
-          <tr>
-            <th scope="col">Paso</th>
-            <th scope="col">Qué pasa</th>
-            <th scope="col">Quién hace qué</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Demo en vivo — 20 minutos</td>
-            <td>Yo muestro, vos mirás</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Hablamos de inversión</td>
-            <td>Los dos charlamos, sin apuro</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Me contás tu negocio — 1 hora</td>
-            <td>Vos hablás, yo escucho</td>
-          </tr>
-          <tr>
-            <td>4–5</td>
-            <td>Configuración completa</td>
-            <td>Yo trabajo, vos descansás</td>
-          </tr>
-          <tr>
-            <td>6</td>
-            <td>Prueba en conjunto</td>
-            <td>Los dos revisamos</td>
-          </tr>
-          <tr>
-            <td>7</td>
-            <td>Lanzamiento + guía de uso</td>
-            <td>Tu bot sale a atender</td>
-          </tr>
-        </tbody>
-      </table>
+      <!-- Tabla resumen — con wrapper para scroll horizontal en móvil -->
+      <div class="tabla-pasos-wrap">
+        <table class="tabla-pasos animar" role="table" aria-label="Resumen del proceso en 6 pasos">
+          <thead>
+            <tr>
+              <th scope="col">Paso</th>
+              <th scope="col">Qué pasa</th>
+              <th scope="col">Quién hace qué</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Demo en vivo — 20 minutos</td>
+              <td>Yo muestro, vos mirás</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Hablamos de inversión</td>
+              <td>Los dos charlamos, sin apuro</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Me contás tu negocio — 1 hora</td>
+              <td>Vos hablás, yo escucho</td>
+            </tr>
+            <tr>
+              <td>4–5</td>
+              <td>Configuración completa</td>
+              <td>Yo trabajo, vos descansás</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Prueba en conjunto</td>
+              <td>Los dos revisamos</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Lanzamiento + guía de uso</td>
+              <td>Tu bot sale a atender</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
     </div>
   </section>
