@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo en vivo — WhatsApp que atiende solo · Mariana</title>
+  <meta name="description" content="Probá en vivo cómo funciona un bot de WhatsApp para tu negocio. Demo interactiva con un ejemplo real de tienda de ropa." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =============================================
+       TOKENS — mismo sistema que index.html
+       ============================================= */
+    :root {
+      --verde:       #25D366;
+      --verde-osc:   #128C7E;
+      --acento:      #7C3AED;
+      --acento-soft: #8B5CF6;
+      --fondo:       #0E0E12;
+      --fondo-card:  #18181f;
+      --fondo-card2: #1f1f2a;
+      --borde:       rgba(255,255,255,0.07);
+      --texto:       #F0F0F5;
+      --texto-2:     #A8A8BE;
+      --rojo:        #FF4757;
+      --radio:       16px;
+      --radio-lg:    24px;
+      --t:           0.25s ease;
+    }
+
+    /* =============================================
+       RESET Y BASE
+       ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--fondo);
+      color: var(--texto);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* =============================================
+       NAVBAR
+       ============================================= */
+    nav {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+      background: rgba(14,14,18,0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--borde);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0;
+      width: 92%; max-width: 1100px; margin: 0 auto;
+    }
+    .nav-logo { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.03em; }
+    .nav-logo span { color: var(--verde); }
+    .nav-links { display: flex; align-items: center; gap: 20px; }
+    .nav-link {
+      font-size: 0.85rem; font-weight: 600; color: var(--texto-2);
+      transition: color var(--t);
+    }
+    .nav-link:hover { color: var(--texto); }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--verde); color: #0E0E12;
+      font-weight: 700; font-size: 0.82rem;
+      padding: 8px 16px; border-radius: 999px;
+      transition: all var(--t);
+    }
+    .nav-cta:hover { background: #1ebe58; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(37,211,102,0.4); }
+
+    /* =============================================
+       LAYOUT GENERAL
+       ============================================= */
+    .pagina { padding-top: 72px; }
+
+    .contenedor {
+      width: 92%; max-width: 1060px; margin: 0 auto;
+    }
+
+    .bloque { padding: 72px 0; }
+    .bloque + .bloque { border-top: 1px solid var(--borde); }
+
+    .etiqueta {
+      display: inline-block;
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.13em; text-transform: uppercase;
+      color: var(--acento-soft);
+      background: rgba(124,58,237,0.12);
+      border: 1px solid rgba(124,58,237,0.28);
+      padding: 4px 13px; border-radius: 999px;
+      margin-bottom: 18px;
+    }
+    .titulo-bloque {
+      font-size: clamp(1.7rem, 4vw, 2.4rem);
+      font-weight: 800; line-height: 1.2;
+      letter-spacing: -0.02em; margin-bottom: 14px;
+    }
+    .titulo-bloque em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--verde), var(--acento-soft));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitulo-bloque { font-size: 1rem; color: var(--texto-2); max-width: 620px; line-height: 1.6; }
+
+    /* =============================================
+       SECCIÓN ANTES — BANDEJA CAÓTICA
+       ============================================= */
+    .antes-frase {
+      font-size: 1.15rem;
+      color: var(--texto-2);
+      max-width: 680px;
+      margin: 0 auto 48px;
+      text-align: center;
+      line-height: 1.7;
+    }
+    .antes-frase strong { color: var(--texto); }
+
+    /* Simulación de bandeja de entrada de WhatsApp */
+    .bandeja-wrap {
+      max-width: 400px;
+      margin: 0 auto;
+      background: #111;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    }
+
+    /* Barra de estado del teléfono */
+    .telefono-status {
+      background: #0F0F0F;
+      padding: 10px 20px 6px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.72rem; font-weight: 600; color: var(--texto);
+    }
+    .tel-hora { font-size: 0.85rem; font-weight: 700; }
+    .tel-icons { display: flex; gap: 6px; align-items: center; font-size: 0.7rem; }
+
+    /* Header de WhatsApp */
+    .wa-header {
+      background: #1E1E26;
+      padding: 10px 16px;
+      display: flex; align-items: center; gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .wa-header-icon { font-size: 1.6rem; }
+    .wa-header-title { font-size: 1rem; font-weight: 700; }
+    .wa-header-sub { font-size: 0.72rem; color: var(--texto-2); }
+    .wa-search {
+      margin: 0 12px 0;
+      background: rgba(255,255,255,0.06);
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 0.78rem;
+      color: var(--texto-2);
+      margin: 8px 12px;
+    }
+
+    /* Lista de chats en la bandeja */
+    .chat-lista { overflow: hidden; }
+
+    .chat-preview {
+      display: flex; gap: 12px; align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      cursor: default;
+      transition: background var(--t);
+      animation: slideIn 0.4s ease both;
+    }
+    .chat-preview:hover { background: rgba(255,255,255,0.03); }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .cp-avatar {
+      flex-shrink: 0;
+      width: 46px; height: 46px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; font-weight: 700;
+      background: #2A2A35;
+    }
+    .cp-body { flex: 1; min-width: 0; }
+    .cp-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px; }
+    .cp-nombre { font-size: 0.9rem; font-weight: 700; }
+    .cp-hora { font-size: 0.7rem; color: var(--rojo); font-weight: 600; white-space: nowrap; }
+    .cp-msg {
+      font-size: 0.78rem; color: var(--texto-2);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 220px;
+    }
+    .cp-badge {
+      flex-shrink: 0;
+      min-width: 20px; height: 20px;
+      background: var(--rojo);
+      border-radius: 999px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.68rem; font-weight: 700;
+      padding: 0 5px;
+    }
+
+    /* Banner de alerta debajo de la bandeja */
+    .bandeja-alerta {
+      margin-top: 20px;
+      background: rgba(255,71,87,0.1);
+      border: 1px solid rgba(255,71,87,0.3);
+      border-radius: var(--radio);
+      padding: 14px 18px;
+      font-size: 0.88rem;
+      color: #FF8080;
+      text-align: center;
+      max-width: 400px;
+      margin: 20px auto 0;
+    }
+
+    /* =============================================
+       SECCIÓN DESPUÉS — DEMO INTERACTIVA
+       ============================================= */
+    .despues-frase {
+      font-size: 1.15rem;
+      color: var(--texto-2);
+      max-width: 680px;
+      margin: 0 auto 48px;
+      text-align: center;
+      line-height: 1.7;
+    }
+    .despues-frase strong { color: var(--verde); }
+
+    /* Layout de dos columnas */
+    .demo-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 0;
+      max-width: 780px;
+      margin: 0 auto;
+      background: #111;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+      height: 540px;
+    }
+
+    /* Panel izquierdo: lista de chats (decorativa) */
+    .panel-izq {
+      background: #18181f;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .panel-izq-header {
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .panel-izq-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; }
+    .panel-search {
+      background: rgba(255,255,255,0.06);
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 0.75rem;
+      color: var(--texto-2);
+    }
+    .panel-chats { overflow-y: auto; flex: 1; }
+    .panel-chat-item {
+      display: flex; gap: 10px; align-items: center;
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      cursor: pointer; transition: background var(--t);
+    }
+    .panel-chat-item.activo { background: rgba(37,211,102,0.08); }
+    .panel-chat-item:hover:not(.activo) { background: rgba(255,255,255,0.03); }
+    .pci-avatar {
+      flex-shrink: 0; width: 38px; height: 38px;
+      border-radius: 50%; background: #2A2A35;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .pci-body { flex: 1; min-width: 0; }
+    .pci-nombre { font-size: 0.82rem; font-weight: 700; }
+    .pci-msg {
+      font-size: 0.72rem; color: var(--texto-2);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .pci-badge {
+      flex-shrink: 0;
+      min-width: 18px; height: 18px;
+      background: var(--verde);
+      border-radius: 999px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; font-weight: 700; color: #0E0E12;
+      padding: 0 4px;
+    }
+
+    /* Panel derecho: conversación activa */
+    .panel-der {
+      display: flex; flex-direction: column;
+      background: #0D0D14;
+      /* Fondo sutil tipo papel de WhatsApp */
+      background-image: radial-gradient(rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 18px 18px;
+    }
+
+    /* Header del chat activo */
+    .chat-activo-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px;
+      background: #18181f;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+    .cah-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(37,211,102,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .cah-nombre { font-size: 0.9rem; font-weight: 700; }
+    .cah-estado { font-size: 0.7rem; color: var(--verde); }
+
+    /* Área de mensajes */
+    #mensajes-chat {
+      flex: 1; overflow-y: auto; padding: 14px 14px 8px;
+      display: flex; flex-direction: column; gap: 8px;
+      scroll-behavior: smooth;
+    }
+    #mensajes-chat::-webkit-scrollbar { width: 4px; }
+    #mensajes-chat::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+    /* Burbujas del chat */
+    .burbuja {
+      max-width: 75%;
+      padding: 9px 13px;
+      border-radius: 12px;
+      font-size: 0.84rem;
+      line-height: 1.45;
+      position: relative;
+      animation: burbuja-in 0.25s ease both;
+    }
+    @keyframes burbuja-in {
+      from { opacity: 0; transform: scale(0.94) translateY(6px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .burbuja.cliente {
+      align-self: flex-end;
+      background: #1D3557;
+      color: #C9DCF0;
+      border-bottom-right-radius: 3px;
+    }
+    .burbuja.bot {
+      align-self: flex-start;
+      background: #1C2B1C;
+      color: #C5E8C5;
+      border-bottom-left-radius: 3px;
+    }
+    .burbuja .hora-msg {
+      font-size: 0.62rem;
+      opacity: 0.5;
+      margin-top: 4px;
+      text-align: right;
+    }
+    .burbuja.cliente .hora-msg { text-align: right; }
+    .burbuja.bot .hora-msg { text-align: left; }
+
+    /* Indicador "escribiendo" */
+    .escribiendo {
+      align-self: flex-start;
+      background: #1C2B1C;
+      border-radius: 12px;
+      border-bottom-left-radius: 3px;
+      padding: 10px 14px;
+      display: flex; gap: 4px; align-items: center;
+      animation: burbuja-in 0.2s ease both;
+    }
+    .punto-anim {
+      width: 7px; height: 7px;
+      background: var(--verde);
+      border-radius: 50%;
+      animation: pulso 1s ease-in-out infinite;
+    }
+    .punto-anim:nth-child(2) { animation-delay: 0.2s; }
+    .punto-anim:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes pulso {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Chips de respuesta rápida */
+    .chips-wrap {
+      padding: 8px 14px;
+      display: flex; flex-wrap: wrap; gap: 7px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      flex-shrink: 0;
+      background: #13131a;
+    }
+    .chip {
+      background: rgba(37,211,102,0.1);
+      border: 1px solid rgba(37,211,102,0.25);
+      color: var(--verde);
+      font-size: 0.78rem; font-weight: 600;
+      padding: 6px 13px; border-radius: 999px;
+      cursor: pointer; transition: all var(--t);
+      white-space: nowrap;
+    }
+    .chip:hover {
+      background: rgba(37,211,102,0.22);
+      border-color: rgba(37,211,102,0.5);
+      transform: translateY(-1px);
+    }
+    .chip:active { transform: scale(0.96); }
+
+    /* Input de texto */
+    .input-wrap {
+      display: flex; gap: 8px; align-items: center;
+      padding: 10px 14px;
+      background: #13131a;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      flex-shrink: 0;
+    }
+    #campo-texto {
+      flex: 1;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 999px;
+      padding: 9px 15px;
+      font-size: 0.83rem;
+      color: var(--texto);
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color var(--t);
+    }
+    #campo-texto:focus { border-color: rgba(37,211,102,0.4); }
+    #campo-texto::placeholder { color: var(--texto-2); }
+    #btn-enviar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--verde);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: all var(--t);
+    }
+    #btn-enviar:hover { background: #1ebe58; transform: scale(1.08); }
+    #btn-enviar svg { width: 16px; height: 16px; fill: #0E0E12; }
+
+    /* =============================================
+       SECCIÓN RESULTADO
+       ============================================= */
+    #resultado-panel {
+      display: none; /* se muestra con JS */
+      margin-top: 32px;
+      background: rgba(37,211,102,0.07);
+      border: 1px solid rgba(37,211,102,0.22);
+      border-radius: var(--radio-lg);
+      padding: 24px 28px;
+      max-width: 780px;
+      margin-left: auto; margin-right: auto;
+      animation: fadeInUp 0.5s ease both;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    #resultado-panel h3 {
+      font-size: 1rem; font-weight: 700;
+      color: var(--verde); margin-bottom: 8px;
+    }
+    #resultado-panel p { font-size: 0.9rem; color: var(--texto-2); }
+    #resumen-topics { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .topic-badge {
+      background: rgba(37,211,102,0.12);
+      border: 1px solid rgba(37,211,102,0.25);
+      color: var(--verde);
+      font-size: 0.75rem; font-weight: 600;
+      padding: 4px 12px; border-radius: 999px;
+    }
+
+    /* =============================================
+       CTA FINAL
+       ============================================= */
+    .cta-demo {
+      text-align: center;
+      padding: 72px 0;
+    }
+    .cta-demo-card {
+      background: var(--fondo-card);
+      border: 1px solid var(--borde);
+      border-radius: var(--radio-lg);
+      padding: 52px 36px;
+      max-width: 620px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-demo-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--verde), var(--acento));
+    }
+    .cta-demo-card h2 {
+      font-size: clamp(1.4rem, 3.5vw, 1.9rem);
+      font-weight: 800; line-height: 1.25;
+      margin-bottom: 14px; letter-spacing: -0.02em;
+    }
+    .cta-demo-card h2 em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--verde), var(--acento-soft));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cta-demo-card p { font-size: 0.95rem; color: var(--texto-2); margin-bottom: 28px; line-height: 1.65; }
+    .btn-cta-demo {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--verde);
+      color: #0E0E12;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem; font-weight: 800;
+      padding: 15px 30px; border-radius: 999px;
+      border: none; cursor: pointer;
+      transition: all var(--t);
+      box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+    }
+    .btn-cta-demo:hover { background: #1ebe58; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(37,211,102,0.5); }
+    .cta-nota { margin-top: 14px; font-size: 0.75rem; color: var(--texto-2); }
+
+    /* =============================================
+       DIVISOR VISUAL ENTRE ANTES Y DESPUÉS
+       ============================================= */
+    .divisor-transformacion {
+      text-align: center;
+      padding: 40px 0;
+      position: relative;
+    }
+    .divisor-transformacion::before {
+      content: '';
+      position: absolute; top: 50%; left: 5%; right: 5%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--borde), var(--borde), transparent);
+    }
+    .divisor-chip {
+      position: relative; z-index: 1;
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--fondo-card);
+      border: 1px solid var(--borde);
+      padding: 10px 22px; border-radius: 999px;
+      font-size: 0.85rem; font-weight: 700;
+      color: var(--texto-2);
+    }
+    .divisor-chip .flecha { color: var(--verde); font-size: 1.1rem; }
+
+    /* =============================================
+       RESPONSIVE
+       ============================================= */
+    @media (max-width: 680px) {
+      .demo-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+        max-height: 90vh;
+      }
+      .panel-izq { display: none; } /* en móvil se oculta el panel de lista */
+      #mensajes-chat { max-height: 340px; }
+      .bandeja-wrap { margin: 0 auto; }
+    }
+
+    /* =============================================
+       BARRA DE PROGRESO DE LECTURA
+       ============================================= */
+    #barra-progreso {
+      position: fixed; top: 0; left: 0;
+      width: 0%; height: 3px;
+      background: linear-gradient(90deg, var(--verde), var(--acento));
+      z-index: 200; transition: width 0.1s linear;
+    }
+
+    /* =============================================
+       ANIMACIONES DE ENTRADA
+       ============================================= */
+    .animar {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .animar.visible { opacity: 1; transform: translateY(0); }
+
+    /* Estilos para el texto enriquecido dentro de las burbujas */
+    .burbuja b { font-weight: 700; }
+    .burbuja ul { padding-left: 16px; margin-top: 4px; }
+    .burbuja ul li { margin-bottom: 2px; }
+    .burbuja .precio { color: #90EE90; font-weight: 700; }
+    .burbuja .resaltado { color: #FFD700; font-weight: 600; }
+
+  </style>
+</head>
+<body>
+
+  <div id="barra-progreso" aria-hidden="true"></div>
+
+  <!-- NAV -->
+  <nav aria-label="Navegación principal">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Mariana<span>.</span></a>
+      <div class="nav-links">
+        <a href="index.html#como-trabajo" class="nav-link">Cómo funciona</a>
+        <a href="index.html#faq" class="nav-link">FAQ</a>
+        <a href="index.html#cta" class="nav-cta" id="nav-cta-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12.004 2C6.477 2 2 6.477 2 12.004c0 1.771.467 3.477 1.352 4.979L2 22l5.145-1.334A9.96 9.96 0 0012.004 22C17.527 22 22 17.527 22 12.004 22 6.477 17.527 2 12.004 2zm0 18.18a8.166 8.166 0 01-4.179-1.148l-.3-.178-3.052.791.814-2.98-.196-.307a8.155 8.155 0 01-1.251-4.358c0-4.512 3.67-8.18 8.164-8.18 4.511 0 8.18 3.668 8.18 8.18 0 4.51-3.669 8.18-8.18 8.18z"/>
+          </svg>
+          Agendá tu demo
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="pagina">
+
+    <!-- ============================================
+         INTRO
+         ============================================ -->
+    <div class="bloque" style="text-align:center; padding-bottom: 48px;">
+      <div class="contenedor">
+        <span class="etiqueta">Demo interactiva — Ropa</span>
+        <h1 class="titulo-bloque">
+          Probá cómo funciona<br /><em>en tiempo real</em>
+        </h1>
+        <p class="subtitulo-bloque" style="margin: 0 auto;">
+          Este es un ejemplo con una tienda de ropa. Primero te muestro cómo es hoy sin el sistema.
+          Después lo podés probar vos mismo y ver la diferencia.
+        </p>
+      </div>
+    </div>
+
+    <!-- ============================================
+         SECCIÓN ANTES — BANDEJA CAÓTICA
+         ============================================ -->
+    <div class="bloque">
+      <div class="contenedor" style="text-align:center;">
+
+        <span class="etiqueta" style="background: rgba(255,71,87,0.1); color: #FF8080; border-color: rgba(255,71,87,0.3);">
+          😤 Sin el sistema — hoy
+        </span>
+
+        <h2 class="titulo-bloque" style="margin-bottom: 14px;">
+          Son las 23:00 hs.<br />El WhatsApp no para.
+        </h2>
+
+        <p class="antes-frase">
+          <strong>Valeria tiene una tienda de ropa en el barrio.</strong> Cuando se va a dormir,
+          los mensajes siguen llegando. Horarios, precios, si hay un talle, si hacen envíos.
+          Cada mensaje sin respuesta es un cliente que al otro día compra en otro lado.
+        </p>
+
+        <!-- Bandeja de WhatsApp caótica -->
+        <div class="bandeja-wrap animar">
+
+          <!-- Status del teléfono -->
+          <div class="telefono-status">
+            <span class="tel-hora">23:14</span>
+            <div class="tel-icons">
+              <span>●●●</span>
+              <span>WiFi</span>
+              <span>🔋</span>
+            </div>
+          </div>
+
+          <!-- Header WhatsApp -->
+          <div class="wa-header">
+            <span class="wa-header-icon">💬</span>
+            <div>
+              <div class="wa-header-title">WhatsApp</div>
+              <div class="wa-header-sub">8 mensajes sin leer</div>
+            </div>
+          </div>
+
+          <!-- Barra de búsqueda -->
+          <div class="wa-search">🔍 Buscar o empezar un chat</div>
+
+          <!-- Lista de chats sin respuesta -->
+          <div class="chat-lista">
+
+            <div class="chat-preview" style="animation-delay:0.05s">
+              <div class="cp-avatar">👩</div>
+              <div class="cp-body">
+                <div class="cp-top">
+                  <span class="cp-nombre">Lucía M.</span>
+                  <span class="cp-hora">hace 3 hs</span>
+                </div>
+                <div class="cp-msg">Hola!! tienen el vestido floral en talle M?</div>
+              </div>
+              <div class="cp-badge">3</div>
+            </div>
+
+            <div class="chat-preview" style="animation-delay:0.1s">
+              <div class="cp-avatar">🧔</div>
+              <div class="cp-body">
+                <div class="cp-top">
+                  <span class="cp-nombre">Rodrigo P.</span>
+                  <span class="cp-hora">hace 2 hs</span>
+                </div>
+                <div class="cp-msg">a qué hora cierran? quiero pasar mañana</div>
+              </div>
+              <div class="cp-badge">1</div>
+            </div>
+
+            <div class="chat-preview" style="animation-delay:0.15s">
+              <div class="cp-avatar">👩‍🦱</div>
+              <div class="cp-body">
+                <div class="cp-top">
+                  <span class="cp-nombre">Daniela R.</span>
+                  <span class="cp-hora">hace 1 hs</span>
+                </div>
+                <div class="cp-msg">cuánto sale el jean skinny? hacen envíos?</div>
+              </div>
+              <div class="cp-badge">2</div>
+            </div>
+
+            <div class="chat-preview" style="animation-delay:0.2s">
+              <div class="cp-avatar">👩‍🦳</div>
+              <div class="cp-body">
+                <div class="cp-top">
+                  <span class="cp-nombre">Susana T.</span>
+                  <span class="cp-hora">hace 45 min</span>
+                </div>
+                <div class="cp-msg">Hola buenas noches! tienen blazer oversize?</div>
+              </div>
+              <div class="cp-badge">1</div>
+            </div>
+
+            <div class="chat-preview" style="animation-delay:0.25s">
+              <div class="cp-avatar">👦</div>
+              <div class="cp-body">
+                <div class="cp-top">
+                  <span class="cp-nombre">Mateo V.</span>
+                  <span class="cp-hora">hace 20 min</span>
+                </div>
+                <div class="cp-msg">ey abren los domingos? hay joggers?</div>
+              </div>
+              <div class="cp-badge">1</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Alerta roja -->
+        <div class="bandeja-alerta animar">
+          ⚠️ Valeria está durmiendo. Estos clientes van a comprar en otro lado antes de que despierte.
+        </div>
+
+      </div>
+    </div>
+
+    <!-- DIVISOR -->
+    <div class="divisor-transformacion">
+      <div class="divisor-chip">
+        <span>Con el sistema</span>
+        <span class="flecha">→</span>
+        <span>se ve así</span>
+      </div>
+    </div>
+
+    <!-- ============================================
+         SECCIÓN DESPUÉS — DEMO INTERACTIVA
+         ============================================ -->
+    <div class="bloque">
+      <div class="contenedor" style="text-align:center;">
+
+        <span class="etiqueta">🟢 Con el sistema — probalo vos</span>
+
+        <h2 class="titulo-bloque" style="margin-bottom: 14px;">
+          Hacé una pregunta.<br />
+          <em>El bot responde en segundos.</em>
+        </h2>
+
+        <p class="despues-frase">
+          Tocá uno de los botones de abajo o escribí tu pregunta.
+          <strong>El bot responde como lo haría en tu negocio:</strong> horarios, precios,
+          stock y envíos. Valeria duerme tranquila.
+        </p>
+
+        <!-- Interfaz de WhatsApp interactiva -->
+        <div class="demo-layout animar">
+
+          <!-- Panel izquierdo decorativo -->
+          <div class="panel-izq">
+            <div class="panel-izq-header">
+              <div class="panel-izq-title">WhatsApp</div>
+              <div class="panel-search">🔍 Buscar chat</div>
+            </div>
+            <div class="panel-chats">
+
+              <div class="panel-chat-item activo">
+                <div class="pci-avatar">🛍️</div>
+                <div class="pci-body">
+                  <div class="pci-nombre">Florencia Ropa</div>
+                  <div class="pci-msg">¡Hola! Estoy para ayudarte 👋</div>
+                </div>
+              </div>
+
+              <div class="panel-chat-item">
+                <div class="pci-avatar">👩</div>
+                <div class="pci-body">
+                  <div class="pci-nombre">Lucía M.</div>
+                  <div class="pci-msg">Hola! tienen el vestido flo…</div>
+                </div>
+                <div class="pci-badge">✓</div>
+              </div>
+
+              <div class="panel-chat-item">
+                <div class="pci-avatar">🧔</div>
+                <div class="pci-body">
+                  <div class="pci-nombre">Rodrigo P.</div>
+                  <div class="pci-msg">a qué hora cierran?</div>
+                </div>
+                <div class="pci-badge">✓</div>
+              </div>
+
+              <div class="panel-chat-item">
+                <div class="pci-avatar">👩‍🦱</div>
+                <div class="pci-body">
+                  <div class="pci-nombre">Daniela R.</div>
+                  <div class="pci-msg">cuánto sale el jean?</div>
+                </div>
+                <div class="pci-badge">✓</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Panel derecho: chat activo -->
+          <div class="panel-der">
+
+            <!-- Header del chat -->
+            <div class="chat-activo-header">
+              <div class="cah-avatar">🛍️</div>
+              <div>
+                <div class="cah-nombre">Florencia Indumentaria</div>
+                <div class="cah-estado">● En línea — responde al instante</div>
+              </div>
+            </div>
+
+            <!-- Mensajes -->
+            <div id="mensajes-chat" role="log" aria-label="Conversación con el bot" aria-live="polite">
+              <!-- Los mensajes se insertan con JS -->
+            </div>
+
+            <!-- Chips de respuesta rápida -->
+            <div class="chips-wrap" id="chips-container" role="group" aria-label="Preguntas frecuentes rápidas">
+              <button class="chip" onclick="enviarDesdeChip('¿Cuáles son los horarios?')" id="chip-horarios">🕐 Horarios</button>
+              <button class="chip" onclick="enviarDesdeChip('¿Cuánto sale el vestido floral?')" id="chip-precio-vestido">👗 Precio vestido</button>
+              <button class="chip" onclick="enviarDesdeChip('¿Tienen jean skinny en talle M?')" id="chip-stock">👖 Stock jean</button>
+              <button class="chip" onclick="enviarDesdeChip('¿Hacen envíos?')" id="chip-envios">🚚 Envíos</button>
+              <button class="chip" onclick="enviarDesdeChip('¿Qué talles hay disponibles?')" id="chip-talles">📏 Talles</button>
+              <button class="chip" onclick="enviarDesdeChip('¿Aceptan tarjeta?')" id="chip-pago">💳 Medios de pago</button>
+            </div>
+
+            <!-- Input de texto libre -->
+            <div class="input-wrap">
+              <input
+                type="text"
+                id="campo-texto"
+                placeholder="Escribí tu pregunta…"
+                autocomplete="off"
+                aria-label="Escribir mensaje al bot"
+                maxlength="120"
+              />
+              <button id="btn-enviar" onclick="enviarMensaje()" aria-label="Enviar mensaje">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Panel de resultado (aparece tras interactuar) -->
+        <div id="resultado-panel" role="status" aria-live="polite">
+          <h3>✅ ¿Lo ves? Eso es lo que pasa con el sistema andando.</h3>
+          <p>
+            El cliente recibió su respuesta en segundos. Valeria no tuvo que despertar,
+            no perdió la venta y al otro día el cliente ya tenía todo lo que necesitaba.
+            Los temas que ya respondió el bot esta noche:
+          </p>
+          <div id="resumen-topics"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============================================
+         CTA FINAL
+         ============================================ -->
+    <div class="cta-demo">
+      <div class="contenedor">
+        <div class="cta-demo-card animar">
+          <h2>¿Lo ves claro? <em>Agendá 20 minutos</em> y te armo la versión para tu negocio</h2>
+          <p>
+            La reunión es gratis y sin compromiso. Te muestro cómo quedaría el bot
+            para tu rubro específico — sin tecnicismos, sin apuro.
+            Si te convence, hablamos los números. Si no, quedaste con una idea real de lo que existe hoy.
+          </p>
+          <button
+            class="btn-cta-demo"
+            id="btn-cta-final"
+            type="button"
+            onclick="alert('Reemplazá este alert() con tu link de Calendly: window.open(\'TU_LINK_CALENDLY\', \'_blank\')')"
+            aria-label="Agendar reunión de 20 minutos gratuita"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+              <path d="M12.004 2C6.477 2 2 6.477 2 12.004c0 1.771.467 3.477 1.352 4.979L2 22l5.145-1.334A9.96 9.96 0 0012.004 22C17.527 22 22 17.527 22 12.004 22 6.477 17.527 2 12.004 2zm0 18.18a8.166 8.166 0 01-4.179-1.148l-.3-.178-3.052.791.814-2.98-.196-.307a8.155 8.155 0 01-1.251-4.358c0-4.512 3.67-8.18 8.164-8.18 4.511 0 8.18 3.668 8.18 8.18 0 4.51-3.669 8.18-8.18 8.18z"/>
+            </svg>
+            Agendá 20 minutos — es gratis
+          </button>
+          <p class="cta-nota">Sin tarjeta · Sin compromiso · Podés cancelar cuando quieras</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /pagina -->
+
+  <!-- FOOTER mínimo -->
+  <footer style="text-align:center; padding: 28px; border-top: 1px solid var(--borde); font-size: 0.8rem; color: var(--texto-2);">
+    <a href="index.html" style="color: var(--verde); font-weight:600;">← Volver al inicio</a>
+    &nbsp;·&nbsp;
+    © 2025 <strong style="color:var(--texto)">Mariana</strong> · Automatización WhatsApp con IA
+  </footer>
+
+  <!-- =============================================
+       JAVASCRIPT — lógica del bot y animaciones
+       ============================================= -->
+  <script>
+    /* ------------------------------------------------
+       BASE DE CONOCIMIENTO DEL BOT
+       Tienda de ropa de barrio: "Florencia Indumentaria"
+    ------------------------------------------------ */
+    var BASE = {
+
+      /* --- HORARIOS --- */
+      horarios: {
+        keywords: ['horario', 'hora', 'abren', 'cierran', 'atienden', 'cuando', 'abierto', 'abierta', 'domingo', 'lunes', 'sabado', 'sábado'],
+        respuesta: function() {
+          return '<b>📅 Nuestros horarios son:</b>\n\n' +
+            '• <b>Lunes a viernes</b>: 9:30 a 20:00 hs\n' +
+            '• <b>Sábados</b>: 9:30 a 17:00 hs\n' +
+            '• <b>Domingos y feriados</b>: cerrado\n\n' +
+            'Estamos en Av. San Martín 1274, a media cuadra de la plaza. 📍';
+        },
+        topic: '🕐 Horarios'
+      },
+
+      /* --- VESTIDO FLORAL --- */
+      vestido: {
+        keywords: ['vestido', 'floral'],
+        respuesta: function() {
+          return '<b>👗 Vestido floral manga corta:</b>\n\n' +
+            '• Talles disponibles: <span class="resaltado">S, M, L</span>\n' +
+            '• Colores: blanco con flores celestes / beige con flores terracota\n' +
+            '• Precio: <span class="precio">$18.500</span>\n\n' +
+            '¿Querés que te lo reserve? Decime el talle y el color 😊';
+        },
+        topic: '👗 Vestido floral'
+      },
+
+      /* --- JEAN SKINNY --- */
+      jean: {
+        keywords: ['jean', 'jean skinny', 'jeans', 'skinny'],
+        respuesta: function() {
+          return '<b>👖 Jean skinny:</b>\n\n' +
+            '• Talles disponibles: <span class="resaltado">36, 38, 40, 42</span>\n' +
+            '• Colores: negro, azul oscuro, azul claro\n' +
+            '• Precio: <span class="precio">$22.000</span>\n\n' +
+            'El 44 está agotado pero entra la semana que viene. ¿Te aviso cuando llega?';
+        },
+        topic: '👖 Jean skinny'
+      },
+
+      /* --- BLAZER --- */
+      blazer: {
+        keywords: ['blazer', 'saco'],
+        respuesta: function() {
+          return '<b>🧥 Blazer oversize:</b>\n\n' +
+            '• Talles disponibles: <span class="resaltado">S/M y L/XL</span>\n' +
+            '• Colores: negro, beige, verde botella\n' +
+            '• Precio: <span class="precio">$35.000</span>\n\n' +
+            'Es un éxito del local, queda muy versátil. 🔥 ¿Querés saber más?';
+        },
+        topic: '🧥 Blazer oversize'
+      },
+
+      /* --- JOGGER / REMERA / CAMPERA --- */
+      otros: {
+        keywords: ['jogger', 'jogging', 'remera', 'campera'],
+        respuesta: function() {
+          return '<b>🛍️ También tenemos:</b>\n\n' +
+            '• <b>Jogger cómodo</b>: $15.500 — talles S al XL\n' +
+            '• <b>Remera básica</b>: $8.900 — talles XS al XL (10 colores)\n' +
+            '• <b>Campera de abrigo</b>: $42.000 — talles S al L\n\n' +
+            '¿Querés los detalles de alguna en particular?';
+        },
+        topic: '🛍️ Otros productos'
+      },
+
+      /* --- ENVÍOS --- */
+      envios: {
+        keywords: ['envio', 'envío', 'envios', 'envíos', 'mandan', 'mandas', 'delivery', 'correo', 'oca', 'moto', 'despachan'],
+        respuesta: function() {
+          return '<b>🚚 Sí, hacemos envíos!</b>\n\n' +
+            '• <b>Zona cercana</b> (radio 5 km): moto en el día, $1.200\n' +
+            '• <b>Todo el país</b>: Correo Argentino o OCA, 3 a 5 días hábiles\n' +
+            '• <b>Envío gratis</b> en compras mayores a $40.000\n\n' +
+            'Te mandamos el seguimiento por acá cuando despachamos 📦';
+        },
+        topic: '🚚 Envíos'
+      },
+
+      /* --- TALLES --- */
+      talles: {
+        keywords: ['talle', 'talles', 'talla', 'medida', 'medidas', 'talle m', 'talle s', 'talle l', 'talle xl', 'xs', 'xxl'],
+        respuesta: function() {
+          return '<b>📏 Talles disponibles:</b>\n\n' +
+            'Trabajamos con talles <span class="resaltado">XS · S · M · L · XL</span>\n' +
+            'y en jeans del <span class="resaltado">36 al 46</span>.\n\n' +
+            'Tenemos guía de talles en el local. Si no podés venir, te paso las medidas por acá. ¿De qué prenda?';
+        },
+        topic: '📏 Talles'
+      },
+
+      /* --- PRECIOS / CATÁLOGO --- */
+      precios: {
+        keywords: ['precio', 'precios', 'cuanto', 'cuánto', 'cuesta', 'vale', 'valen', 'catalogo', 'catálogo', 'lista'],
+        respuesta: function() {
+          return '<b>💰 Precios actualizados:</b>\n\n' +
+            '• Vestido floral: <span class="precio">$18.500</span>\n' +
+            '• Jean skinny: <span class="precio">$22.000</span>\n' +
+            '• Blazer oversize: <span class="precio">$35.000</span>\n' +
+            '• Jogger cómodo: <span class="precio">$15.500</span>\n' +
+            '• Remera básica: <span class="precio">$8.900</span>\n' +
+            '• Campera de abrigo: <span class="precio">$42.000</span>\n\n' +
+            'Todos los precios incluyen IVA. Efectivo o transferencia sin recargo 🙌';
+        },
+        topic: '💰 Lista de precios'
+      },
+
+      /* --- MEDIOS DE PAGO --- */
+      pago: {
+        keywords: ['pago', 'tarjeta', 'credito', 'crédito', 'debito', 'débito', 'mercadopago', 'efectivo', 'transferencia', 'transferencia bancaria', 'cuotas'],
+        respuesta: function() {
+          return '<b>💳 Medios de pago:</b>\n\n' +
+            '• Efectivo ✅\n' +
+            '• Transferencia bancaria ✅ (sin recargo)\n' +
+            '• MercadoPago ✅\n' +
+            '• Tarjeta de débito ✅\n' +
+            '• Tarjeta de crédito ✅ (en 3 cuotas sin interés con bancos seleccionados)\n\n' +
+            '¿Necesitás el alias o CBU para transferir?';
+        },
+        topic: '💳 Medios de pago'
+      },
+
+      /* --- UBICACIÓN / DIRECCIÓN --- */
+      ubicacion: {
+        keywords: ['donde', 'dónde', 'ubicacion', 'ubicación', 'direccion', 'dirección', 'local', 'barrio', 'cómo llego', 'como llego'],
+        respuesta: function() {
+          return '<b>📍 Estamos en:</b>\n\n' +
+            '<b>Av. San Martín 1274</b>, a media cuadra de la plaza principal.\n\n' +
+            '• Colectivos que pasan: 21, 34, 118\n' +
+            '• Hay estacionamiento en la vereda de enfrente\n\n' +
+            'Si querés te mandamos el link de Maps 🗺️';
+        },
+        topic: '📍 Ubicación'
+      },
+
+      /* --- STOCK GENÉRICO --- */
+      stock: {
+        keywords: ['stock', 'tienen', 'hay', 'disponible', 'disponibles', 'queda', 'quedan', 'agotado', 'agotada'],
+        respuesta: function() {
+          return '<b>📦 Para consultarte el stock exacto, necesito saber:</b>\n\n' +
+            '1️⃣ ¿Qué prenda te interesa?\n' +
+            '2️⃣ ¿Qué talle buscás?\n\n' +
+            'Con eso te confirmo al instante si tenemos disponible 😊\n\n' +
+            '<i>Pista: tocá uno de los botones de abajo para preguntar por una prenda específica.</i>';
+        },
+        topic: '📦 Consulta de stock'
+      },
+
+      /* --- SALUDO --- */
+      saludo: {
+        keywords: ['hola', 'buenas', 'buen dia', 'buen día', 'buenas noches', 'buenas tardes', 'hi', 'hey', 'ola'],
+        respuesta: function() {
+          var hora = new Date().getHours();
+          var saludo = hora < 12 ? '¡Buenos días' : hora < 20 ? '¡Buenas tardes' : '¡Buenas noches';
+          return saludo + '! 👋\n\nSoy el asistente de <b>Florencia Indumentaria</b>.\n\n' +
+            'Puedo ayudarte con:\n' +
+            '• 🕐 Horarios del local\n' +
+            '• 💰 Precios y catálogo\n' +
+            '• 📦 Stock de prendas\n' +
+            '• 🚚 Envíos\n' +
+            '• 💳 Medios de pago\n\n' +
+            '¿Sobre qué te puedo ayudar?';
+        },
+        topic: null /* el saludo no suma al resumen */
+      },
+
+      /* --- GRACIAS / CHAU --- */
+      gracias: {
+        keywords: ['gracias', 'gracia', 'gracias!', 'dale', 'perfecto', 'ok', 'buenisimo', 'buenísimo', 'genial', 'chau', 'hasta luego', 'nos vemos'],
+        respuesta: function() {
+          return '¡Fue un placer! 😊\n\n' +
+            'Cualquier otra duda, acá estoy. ¡Que tengas un excelente día! 🌟\n\n' +
+            '<i>Si querés pasar al local, recordá que abrimos de lunes a viernes de 9:30 a 20:00 hs y los sábados hasta las 17:00 hs.</i>';
+        },
+        topic: null
+      }
+    };
+
+    /* Respuesta de fallback cuando no entiende */
+    function respuestaFallback(texto) {
+      return '¡Entendido! 👍\n\n' +
+        'Para darte la mejor información, ¿me podés decir si tu consulta es sobre:\n\n' +
+        '• <b>Horarios</b> del local\n' +
+        '• <b>Precios</b> o catálogo\n' +
+        '• <b>Stock</b> de alguna prenda\n' +
+        '• <b>Envíos</b> o entrega\n' +
+        '• <b>Medios de pago</b>\n\n' +
+        '<i>También podés usar los botones de abajo para preguntar más rápido.</i>';
+    }
+
+    /* ------------------------------------------------
+       ESTADO DEL CHAT
+    ------------------------------------------------ */
+    var temasRespondidos = []; /* temas que el bot ya cubrió */
+    var totalMensajes = 0;     /* contador de mensajes del usuario */
+    var bloqueado = false;     /* evita spam mientras el bot "escribe" */
+
+    /* Hora del chat (simulada, parte de las 23:xx para el ejemplo) */
+    function horaChat() {
+      var base = new Date();
+      var m = base.getMinutes() + totalMensajes;
+      var h = '23';
+      var min = String(m % 60).padStart(2, '0');
+      return h + ':' + min;
+    }
+
+    /* ------------------------------------------------
+       RENDERIZADO DE MENSAJES
+    ------------------------------------------------ */
+    var contenedor = document.getElementById('mensajes-chat');
+
+    /* Convierte \n en <br> y respeta etiquetas HTML ya incluidas */
+    function formatearTexto(texto) {
+      return texto.replace(/\n/g, '<br>');
+    }
+
+    /* Agrega una burbuja al chat */
+    function agregarBurbuja(texto, tipo, hora) {
+      var div = document.createElement('div');
+      div.className = 'burbuja ' + tipo;
+      div.innerHTML = formatearTexto(texto) + '<div class="hora-msg">' + hora + (tipo === 'cliente' ? ' ✓✓' : '') + '</div>';
+      contenedor.appendChild(div);
+      /* Scroll al final */
+      setTimeout(function() { contenedor.scrollTop = contenedor.scrollHeight; }, 50);
+    }
+
+    /* Muestra el indicador de "escribiendo..." */
+    function mostrarEscribiendo() {
+      var div = document.createElement('div');
+      div.className = 'escribiendo';
+      div.id = 'indicador-escribiendo';
+      div.innerHTML = '<div class="punto-anim"></div><div class="punto-anim"></div><div class="punto-anim"></div>';
+      contenedor.appendChild(div);
+      contenedor.scrollTop = contenedor.scrollHeight;
+    }
+
+    /* Quita el indicador de "escribiendo..." */
+    function quitarEscribiendo() {
+      var ind = document.getElementById('indicador-escribiendo');
+      if (ind) ind.remove();
+    }
+
+    /* ------------------------------------------------
+       LÓGICA DEL BOT: qué responder
+    ------------------------------------------------ */
+    function obtenerRespuesta(texto) {
+      var t = texto.toLowerCase()
+        .replace(/[áàä]/g, 'a').replace(/[éèë]/g, 'e')
+        .replace(/[íìï]/g, 'i').replace(/[óòö]/g, 'o')
+        .replace(/[úùü]/g, 'u')
+        .replace(/[¿¡!?,\.]/g, '');
+
+      /* Recorremos cada categoría de la base */
+      for (var clave in BASE) {
+        var categoria = BASE[clave];
+        for (var i = 0; i < categoria.keywords.length; i++) {
+          if (t.indexOf(categoria.keywords[i]) !== -1) {
+            /* Registrar el tema en el resumen si tiene topic */
+            if (categoria.topic && temasRespondidos.indexOf(categoria.topic) === -1) {
+              temasRespondidos.push(categoria.topic);
+            }
+            return categoria.respuesta();
+          }
+        }
+      }
+      return respuestaFallback(texto);
+    }
+
+    /* ------------------------------------------------
+       FLUJO PRINCIPAL: enviar mensaje y recibir respuesta
+    ------------------------------------------------ */
+    function procesarMensaje(texto) {
+      if (bloqueado || texto.trim() === '') return;
+      bloqueado = true;
+      totalMensajes++;
+
+      var hora = horaChat();
+
+      /* 1. Mostrar mensaje del usuario */
+      agregarBurbuja(texto, 'cliente', hora);
+
+      /* 2. Limpiar input */
+      document.getElementById('campo-texto').value = '';
+
+      /* 3. Delay realista: bot "escribe" entre 900ms y 1.5s */
+      var delay = 900 + Math.random() * 600;
+
+      setTimeout(function() {
+        mostrarEscribiendo();
+      }, 300);
+
+      setTimeout(function() {
+        quitarEscribiendo();
+        var respuesta = obtenerRespuesta(texto);
+        agregarBurbuja(respuesta, 'bot', hora);
+        bloqueado = false;
+
+        /* Mostrar panel de resultado después de la primera respuesta */
+        mostrarResultado();
+      }, delay + 300);
+    }
+
+    /* Envío desde input de texto */
+    function enviarMensaje() {
+      var campo = document.getElementById('campo-texto');
+      var texto = campo.value.trim();
+      procesarMensaje(texto);
+    }
+
+    /* Envío desde chip */
+    function enviarDesdeChip(texto) {
+      procesarMensaje(texto);
+    }
+
+    /* Enter en el input */
+    document.getElementById('campo-texto').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') enviarMensaje();
+    });
+
+    /* ------------------------------------------------
+       MOSTRAR PANEL DE RESULTADO (DESPUÉS)
+    ------------------------------------------------ */
+    function mostrarResultado() {
+      if (totalMensajes < 1) return;
+
+      var panel = document.getElementById('resultado-panel');
+      var resumen = document.getElementById('resumen-topics');
+
+      /* Mostrar el panel */
+      panel.style.display = 'block';
+      panel.style.marginTop = '32px';
+
+      /* Actualizar los topics */
+      resumen.innerHTML = '';
+      if (temasRespondidos.length === 0) {
+        resumen.innerHTML = '<span class="topic-badge">💬 Consulta general</span>';
+      } else {
+        temasRespondidos.forEach(function(t) {
+          var badge = document.createElement('span');
+          badge.className = 'topic-badge';
+          badge.textContent = t;
+          resumen.appendChild(badge);
+        });
+      }
+    }
+
+    /* ------------------------------------------------
+       MENSAJE INICIAL DEL BOT (se muestra al cargar)
+    ------------------------------------------------ */
+    window.addEventListener('load', function() {
+      var hora = '23:00';
+      /* Pequeño delay para que se vea que "llega" */
+      setTimeout(function() {
+        mostrarEscribiendo();
+        setTimeout(function() {
+          quitarEscribiendo();
+          agregarBurbuja(
+            '¡Buenas noches! 👋\n\nSoy el asistente de <b>Florencia Indumentaria</b>.\n\n' +
+            'Puedo ayudarte con horarios, precios, stock y envíos.\n\n' +
+            'Usá los botones de abajo o escribí tu consulta 😊',
+            'bot',
+            hora
+          );
+        }, 900);
+      }, 600);
+    });
+
+    /* ------------------------------------------------
+       ANIMACIONES DE ENTRADA — IntersectionObserver
+    ------------------------------------------------ */
+    var obs = new IntersectionObserver(function(entradas) {
+      entradas.forEach(function(e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.animar').forEach(function(el) { obs.observe(el); });
+
+    /* ------------------------------------------------
+       BARRA DE PROGRESO DE LECTURA
+    ------------------------------------------------ */
+    window.addEventListener('scroll', function() {
+      var total = document.documentElement.scrollHeight - window.innerHeight;
+      var p = total > 0 ? (window.scrollY / total) * 100 : 0;
+      document.getElementById('barra-progreso').style.width = p + '%';
+    }, { passive: true });
+
+  </script>
+
+</body>
+</html>
